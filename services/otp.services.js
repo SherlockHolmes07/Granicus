@@ -12,7 +12,7 @@ const client = twilio(accountSid, authToken);
 const sendSms = async (to, body) => {
   try {
     const message = await client.messages.create({
-      to: to,
+      to: `+91${to}`,
       from: process.env.TWILIO_PHONE_NUMBER,
       body: body,
     });
@@ -28,6 +28,12 @@ const sendOtp = async (mobileNumber) => {
   const message = `Your Jain Census OTP is ${otp}`;
 
   let otpRecord = await Otp.findOne({ mobileNumber: mobileNumber });
+
+  // get user form Users table and delete if exists
+  const user = await Users.findOne({ mobile: mobileNumber });
+  if (user) {
+    await user.destroy();
+  }
   
   if (otpRecord) {
     otpRecord.otp = otp;
@@ -48,6 +54,8 @@ const verifyOtp = async(mobileNumber, otp) => {
   if (otpRecord && otpRecord.otp.toString() === otp) {
     return true;
   }
+  console.log(otpRecord.otp.toString(), otp);
+  return false;
 }
 
 module.exports = {
