@@ -1,10 +1,14 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 const postgres = require('postgres');
 const db = require('./models');
+const authRoutes = require('./routes/auth.routes');
 
 require('dotenv').config();
+// Enable All CORS Requests
+app.use(cors());
 
 
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
@@ -44,7 +48,8 @@ app.get('/', (req, res) => {
   res.send('Hello, Jain Census API!');
 });
 
+app.use('/auth', authRoutes);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-

@@ -24,6 +24,7 @@ db.users = require('./user.model.js')(sequelize, Sequelize);
 db.temples = require('./temple.model.js')(sequelize, Sequelize);
 db.restaurants = require('./restaurant.model.js')(sequelize, Sequelize);
 db.dharamshalas = require('./dharmshala.model.js')(sequelize, Sequelize);
+db.otps = require('./otp.model.js')(sequelize, Sequelize);
 
 // Setup associations here (if any)
 

@@ -1,17 +1,56 @@
-const crypto = require('crypto');
+const axios = require("axios");
+const twilio = require("twilio");
+const db = require("../models");
+const Otp = db.otps;
+const Users = db.users;
 
-// Generate an OTP
-const generateOtp = () => {
-    const otp = crypto.randomInt(100000, 999999);
-    return otp;
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = twilio(accountSid, authToken);
+
+const sendSms = async (to, body) => {
+  try {
+    const message = await client.messages.create({
+      to: to,
+      from: process.env.TWILIO_PHONE_NUMBER,
+      body: body,
+    });
+
+    console.log("Message sent:", message.sid);
+  } catch (error) {
+    console.error("Error sending SMS:", error);
+  }
+}
+
+const sendOtp = async (mobileNumber) => {
+  const otp = Math.floor(1000 + Math.random() * 9000);
+  const message = `Your Jain Census OTP is ${otp}`;
+
+  let otpRecord = await Otp.findOne({ mobileNumber: mobileNumber });
+  
+  if (otpRecord) {
+    otpRecord.otp = otp;
+    await otpRecord.save();
+  } else {
+    otpRecord = new Otp({ mobileNumber: mobileNumber, otp: otp });
+    await otpRecord.save();
+  }
+  
+  sendSms(mobileNumber, message);
+  return otp;
 };
 
-// Verify an OTP
-const verifyOtp = (inputOtp, actualOtp) => {
-    return inputOtp === actualOtp;
-};
+
+const verifyOtp = async(mobileNumber, otp) => {
+  const otpRecord = await Otp.findOne({ mobileNumber: mobileNumber });
+  // convert to string to compare
+  if (otpRecord && otpRecord.otp.toString() === otp) {
+    return true;
+  }
+}
 
 module.exports = {
-    generateOtp,
-    verifyOtp
+  sendOtp,
+  verifyOtp
 };
