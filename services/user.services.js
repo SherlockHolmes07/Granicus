@@ -35,8 +35,18 @@ const updateUser = async (id, userData) => {
     }
 };
 
+// Compare password
+const comparePassword = async (password, userPassword) => {
+    try {
+        return password === userPassword;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     createUser,
     getUserByMobile,
-    updateUser
+    updateUser,
+    comparePassword,
 };
