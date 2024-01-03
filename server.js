@@ -5,6 +5,7 @@ const port = process.env.PORT || 3000;
 const postgres = require('postgres');
 const db = require('./models');
 const authRoutes = require('./routes/auth.routes');
+const profileRoutes = require('./routes/profile.routes');
 
 require('dotenv').config();
 // Enable All CORS Requests
@@ -44,11 +45,16 @@ db.sequelize.sync()
 
 app.use(express.json());
 
+// simple route
 app.get('/', (req, res) => {
   res.send('Hello, Jain Census API!');
 });
 
+// auth routes
 app.use('/auth', authRoutes);
+
+// profile routes
+app.use('/profile', profileRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
