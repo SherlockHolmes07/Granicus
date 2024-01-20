@@ -15,10 +15,6 @@ module.exports = (sequelize, Sequelize) => {
                 len: {
                     args: [10, 15],
                     msg: "Mobile number length should be between 10 and 15 characters"
-                },
-                is: {
-                    args: /^[0-9]+$/i,
-                    msg: "Mobile number should only contain digits"
                 }
             }
         },
@@ -62,30 +58,10 @@ module.exports = (sequelize, Sequelize) => {
         numberOfBrothers: {
             type: Sequelize.INTEGER,
             allowNull: true,
-            validate: {
-                min: {
-                    args: 0,
-                    msg: "Number of brothers cannot be negative"
-                },
-                max: {
-                    args: 20,
-                    msg: "Number of brothers cannot exceed 20"
-                }
-            }        
         },
         numberOfSisters: {
             type: Sequelize.INTEGER,
             allowNull: true,
-            validate: {
-                min: {
-                    args: 0,
-                    msg: "Number of sisters cannot be negative"
-                },
-                max: {
-                    args: 20,
-                    msg: "Number of sisters cannot exceed 20"
-                }
-            }
         },
         siblingNames: {
             type: Sequelize.STRING,

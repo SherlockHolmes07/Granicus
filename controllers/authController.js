@@ -1,6 +1,7 @@
 const otpService = require('../services/otp.services.js');
 const userService = require('../services/user.services.js');
 const jwt = require('jsonwebtoken');
+const profileService = require('../services/profile.services.js');
 
 exports.sendOTP = async (req, res) => {
     const { phoneNumber } = req.body;
@@ -36,10 +37,16 @@ exports.register = async (req, res) => {
       return res.status(500).json({ error: 'Failed to create user' });
     }
 
+    // create profile
+    const profileDate = {
+      userId: user.id,
+    };
+    await profileService.createProfile(profileDate);
+    
     // Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.SECRETKEY, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id }, process.env.SECRETKEY, { expiresIn: '20d' });
 
-    res.status(201).json({ token });
+    res.status(201).json({ token, userId: user.id });
 };
 
 
@@ -56,7 +63,7 @@ exports.login = async (req, res) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.SECRETKEY, { expiresIn: '1h' });
-
-    res.status(200).json({ token });
+    const token = jwt.sign({ id: user.id }, process.env.SECRETKEY, { expiresIn: '4d' });
+    console.log(user.id)
+    res.status(200).json({ token, userId: user.id });
 }

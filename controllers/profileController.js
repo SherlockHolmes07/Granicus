@@ -2,6 +2,7 @@ const profileService = require('../services/profile.services.js');
 
 exports.getProfile = async (req, res) => {
     const { userId } = req.params;
+    console.log("userId", userId);
     const profile = await profileService.getProfileByUserId(userId);
     if (!profile) {
         return res.status(404).json({ error: 'Profile not found' });
