@@ -33,23 +33,5 @@ db.otps = require("./otp.model.js")(sequelize, Sequelize);
 db.profiles = require("./profile.model.js")(sequelize, Sequelize);
 
 
-// Setup associations here (if any)
-db.users.hasOne(db.otps, {
-  foreignKey: "mobileNumber",
-  as: "otp",
-});
-
-db.otps.belongsTo(db.users, {
-  foreignKey: "mobileNumber",
-  as: "user",
-});
-
-db.users.hasOne(db.profiles, {
-   foreignKey: "userId", as: "profile" 
-});
-
-db.profiles.belongsTo(db.users, { 
-  foreignKey: "userId", as: "user" 
-});
-
+// Define associations
 module.exports = db;

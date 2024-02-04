@@ -34,7 +34,7 @@ async function getPgVersion() {
 getPgVersion();
 
 // Sync all defined models to the DB
-db.sequelize.sync()
+db.sequelize.sync({ alter: true })
   .then(() => {
     console.log('Database sync complete.');
   })

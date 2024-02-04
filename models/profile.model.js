@@ -8,6 +8,18 @@ module.exports = (sequelize, Sequelize) => {
                 key: 'id', // 'id' refers to column name in users table
             }
         },
+        name: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        mobile: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            references: {
+                model: 'Users', // 'users' refers to table name
+                key: 'mobile', // 'id' refers to column name in users table
+            }
+        },
         alternatePhoneNumber: {
             type: Sequelize.STRING,
             allowNull: true,
@@ -67,10 +79,11 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: true,
             get() {
-                return this.getDataValue('siblingNames').split(',');
+                const value = this.getDataValue('siblingNames');
+                return value ? value.split(',') : null; // or return an empty array []        
             },
             set(val) {
-                this.setDataValue('siblingNames', val.join(','));
+                this.setDataValue('siblingNames', val ? val.join(',') : null);
             }
         },
         country: {

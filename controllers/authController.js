@@ -37,11 +37,19 @@ exports.register = async (req, res) => {
       return res.status(500).json({ error: 'Failed to create user' });
     }
 
-    // create profile
-    const profileDate = {
-      userId: user.id,
+    const profileData = {
+        userId: user.id,
+        name: user.name,
+        mobile: user.mobile
     };
-    await profileService.createProfile(profileDate);
+
+    const profile = await profileService.createProfile(profileData);
+    
+    if(!profile) {
+        return res.status(500).json({ error: 'Failed to create profile' });
+    }
+
+    console.log("profile", profile);
     
     // Generate JWT token
     const token = jwt.sign({ id: user.id }, process.env.SECRETKEY, { expiresIn: '20d' });

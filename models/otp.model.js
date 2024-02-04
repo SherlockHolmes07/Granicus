@@ -11,8 +11,8 @@ module.exports = (sequelize, Sequelize) => {
         },
         mobileNumber: {
             type: Sequelize.STRING,
+            unique: true,
             allowNull: false,
-            uniqe: true
         },
         expiry: {
             type: Sequelize.DATE,
